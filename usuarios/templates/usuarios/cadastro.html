@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro de Adotantes | Adote seu Pet!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #4CAF50 !important;
+            color: white;
+            padding: 1rem;
+        }
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <span class="navbar-brand">Adote seu Pet!</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Cadastro de Adotante</h1>
+        <form action="{% url 'cadastro_realizado' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nome">nome</label>
+                <input id="nome" name="nome" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="sobrenome">sobrenome</label>
+                <input id="sobrenome" name="sobrenome" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="idade">idade</label>
+                <input id="idade" name="idade" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone">telefone</label>
+                <input id="telefone" name="telefone" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="email">email</label>
+                <input id="email" name="email" type="email" required>
+            </div>
+            <div class="form-group">
+                <label for="rua">rua</label>
+                <input id="rua" name="rua" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="numero">numero</label>
+                <input id="numero" name="numero" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="complemento">complemento</label>
+                <input id="complemento" name="complemento" type="text">
+            </div>
+            <div class="form-group">
+                <label for="bairro">bairro</label>
+                <input id="bairro" name="bairro" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="cidade">cidade</label>
+                <input id="cidade" name="cidade" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="cep">cep</label>
+                <input id="cep" name="cep" type="text" required>
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+</body>
+</html>

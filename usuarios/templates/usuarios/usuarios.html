@@ -35,9 +35,12 @@
             <th>idade</th>
             <th>telefone</th>
             <th>email</th>
-            <th>endereco</th>
+            <th>rua</th>
+	    <th>numero</th>
+	    <th>complemento</th>
             <th>bairro</th>
             <th>cidade</th>
+	    <th>cep</th>
         </tr>
         {% for usuario in usuarios %}
         <tr>
@@ -46,9 +49,12 @@
             <td> {{usuario.idade}} </td>
             <td> {{usuario.telefone}} </td>
             <td> {{usuario.email}} </td>
-            <td> {{usuario.endereco}} </td>
+            <td> {{usuario.rua}} </td>
+            <td> {{usuario.numero}} </td>
+	    <td> {{usuario.complemento}} </td>
             <td> {{usuario.bairro}} </td>
             <td> {{usuario.cidade}} </td>
+	    <td> {{usuario.cep}} </td>
         
         </tr>
         {% endfor %}
