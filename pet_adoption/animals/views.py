@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Animal, User
-from .serializers import AnimalSerializer, UserSerializer, RegisterSerializer, UserRegistrationSerializer
+from .permissions import IsAdminUser
+from .serializers import AnimalSerializer, UserRegistrationSerializer
 from rest_framework.permissions import AllowAny
 
 
@@ -12,21 +13,22 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
-
 class AnimalViewSet(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    
+    permission_classes = [IsAuthenticated]  # Para listar animais, qualquer usuário autenticado
+
     filterset_fields = ['species', 'status', 'vaccinated', 'neutered']
     search_fields = ['name', 'breed', 'description']
     ordering_fields = ['created_at', 'name', 'species']
 
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'destroy']:
+            return [IsAdminUser()]
+        return super().get_permissions()
+    
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 

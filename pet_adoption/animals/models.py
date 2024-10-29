@@ -56,7 +56,13 @@ class Animal(models.Model):
         return f"{self.name} - {self.species} ({self.breed})"
 
 class User(AbstractUser):
+    USER_ROLES = [
+        ('admin', 'Administrador'),
+        ('adopter', 'Adotante'),
+    ]
+
     email = models.EmailField(unique=True) 
+    role = models.CharField(max_length=10, choices=USER_ROLES, default='adopter')
     
     class Meta:
         db_table = 'users'
@@ -64,4 +70,4 @@ class User(AbstractUser):
         verbose_name_plural = 'Users'
 
     def __str__(self):
-        return self.username
+        return f"{self.username} ({self.get_role_display()})"
