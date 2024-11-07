@@ -71,3 +71,33 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"
+
+class AdopterProfile(models.Model):
+    RESIDENCE_CHOICES = [
+        ('HOUSE', 'Casa'),
+        ('APARTMENT', 'Apartamento'),
+        ('FARM', 'Fazenda')
+    ]
+    
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField(max_length=20, blank=True)
+    birth_date = models.DateField(blank=True, null=True)
+    street_name = models.CharField(max_length=255)
+    street_number = models.CharField(max_length=10)
+    complement = models.CharField(max_length=255, blank=True)
+    neighborhood = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    zipcode = models.CharField(max_length=10)
+    residence_type = models.CharField(max_length=10, choices=RESIDENCE_CHOICES, default='HOUSE')
+    has_screens = models.BooleanField(default=False)
+    number_of_residents = models.IntegerField(default=1)
+    has_children = models.BooleanField(default=False)
+    has_allergic_residents = models.BooleanField(default=False)
+    has_other_pets = models.BooleanField(default=False)
+    number_of_pets = models.IntegerField(default=0)
+    adoption_motivation = models.TextField(blank=True)
+    acknowledges_costs = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Perfil de {self.user.username}"

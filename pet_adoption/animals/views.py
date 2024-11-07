@@ -1,7 +1,8 @@
-from rest_framework import viewsets, filters, generics, permissions
+from rest_framework import viewsets, filters, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Animal, User
 from .permissions import IsAdminUser
@@ -12,6 +13,29 @@ from rest_framework.permissions import AllowAny
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
+
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                user = serializer.save()
+                return Response({
+                    'status': 'success',
+                    'message': 'User registered successfully'
+                }, status=status.HTTP_201_CREATED)
+            except IntegrityError as e:
+                return Response({
+                    'status': 'error',
+                    'message': str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminRegistrationView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    # permission_classes = [IsAdminUser]
+
+    def perform_create(self, serializer):
+        serializer.save(role='admin')
 
 class AnimalViewSet(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
