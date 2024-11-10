@@ -1,6 +1,5 @@
 from rest_framework import viewsets, filters, generics, permissions, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
@@ -43,9 +42,9 @@ class AdminRegistrationView(generics.CreateAPIView):
 class AnimalViewSet(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    permission_classes = [IsAuthenticated]  # Para listar animais, qualquer usuário autenticado
 
     filterset_fields = ['species', 'status', 'vaccinated', 'neutered']
     search_fields = ['name', 'breed', 'description']
