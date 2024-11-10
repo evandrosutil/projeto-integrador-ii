@@ -3,6 +3,7 @@ from .models import Animal, User, AdopterProfile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
    
 User = get_user_model()
@@ -65,76 +66,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 user.delete()
             raise e
 
-
-    # SEGUNDO TESTE
-    # def create(self, validated_data):
-    #     try:
-    #         profile_data = validated_data.pop('profile')
-    #         # Remove phone do validated_data se existir no nível raiz
-    #         validated_data.pop('phone', None)
-            
-    #         # Cria o usuário
-    #         user = User.objects.create_user(
-    #             **validated_data,
-    #             # role='adopter'  # Força o role como 'adopter'
-    #         )
-            
-    #         # Cria o perfil
-    #         AdopterProfile.objects.create(user=user, **profile_data)
-            
-    #         return user
-            
-    #     except Exception as e:
-    #         # Se algo der errado, deletamos o usuário para evitar órfãos
-    #         if 'user' in locals():
-    #             user.delete()
-    #         raise e
-
-    
-    # PRIMEIRO TESTE
-    # def create(self, validated_data):
-    #     profile_data = validated_data.pop('profile', None)
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
         
-    #     # Verifica se já existe um usuário com este email
-    #     email = validated_data.get('email')
-    #     existing_user = User.objects.filter(email=email).first()
+        token['username'] = user.username
+        token['email'] = user.email
+        token['role'] = user.role
         
-    #     if existing_user:
-    #         # Se o usuário existe, atualiza os dados do perfil
-    #         if profile_data and existing_user.role == 'adopter':
-    #             profile, created = AdopterProfile.objects.update_or_create(
-    #                 user=existing_user,
-    #                 defaults=profile_data
-    #             )
-    #         return existing_user
-            
-    #     # Se não existe, cria um novo usuário
-    #     user = User.objects.create_user(**validated_data)
-        
-    #     if user.role == 'adopter' and profile_data:
-    #         AdopterProfile.objects.create(user=user, **profile_data)
-            
-    #     return user
-
-    # def update(self, instance, validated_data):
-    #     profile_data = validated_data.pop('profile', None)
-        
-    #     # Atualiza os dados do usuário
-    #     for attr, value in validated_data.items():
-    #         if attr == 'password':
-    #             instance.set_password(value)
-    #         else:
-    #             setattr(instance, attr, value)
-    #     instance.save()
-        
-    #     # Atualiza ou cria o perfil
-    #     if profile_data and instance.role == 'adopter':
-    #         AdopterProfile.objects.update_or_create(
-    #             user=instance,
-    #             defaults=profile_data
-    #         )
-            
-    #     return instance
+        return token
 
 class AnimalSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
@@ -145,7 +86,7 @@ class AnimalSerializer(serializers.ModelSerializer):
             'id', 'name', 'species', 'breed', 'gender',
             'age_estimated', 'weight', 'status', 'description',
             'vaccinated', 'neutered', 'created_at', 'updated_at',
-            'created_by'
+            'created_by', 'image'
         ]
         read_only_fields = ['created_at', 'updated_at', 'created_by']
 

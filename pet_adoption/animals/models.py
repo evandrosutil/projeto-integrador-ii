@@ -1,6 +1,11 @@
+import os
+
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
+
+from PIL import Image
+
 
 class Animal(models.Model):
     GENDER_CHOICES = [
@@ -47,6 +52,8 @@ class Animal(models.Model):
         related_name='animals_created'
     )
 
+    image = models.ImageField(upload_to='animal_images/', blank=True, null=True, verbose_name='Imagem')
+
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Animal'
@@ -54,6 +61,13 @@ class Animal(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.species} ({self.breed})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.image:
+            image_path = os.path.join(settings.MEDIA_ROOT, self.image.name)
+            resize_image(image_path, image_path, size=(150, 150))
 
 class User(AbstractUser):
     USER_ROLES = [
@@ -101,3 +115,8 @@ class AdopterProfile(models.Model):
     
     def __str__(self):
         return f"Perfil de {self.user.username}"
+
+def resize_image(input_path, output_path, size=(150, 150)):
+    with Image.open(input_path) as img:
+        img = img.resize(size, Image.Resampling.LANCZOS)  # ou Image.LANCZOS em versões mais recentes
+        img.save(output_path, "JPEG")

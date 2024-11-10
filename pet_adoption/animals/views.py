@@ -6,9 +6,12 @@ from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Animal, User
 from .permissions import IsAdminUser
-from .serializers import AnimalSerializer, UserRegistrationSerializer
+from .serializers import AnimalSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
