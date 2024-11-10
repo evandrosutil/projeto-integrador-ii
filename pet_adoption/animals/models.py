@@ -116,7 +116,7 @@ class AdopterProfile(models.Model):
     def __str__(self):
         return f"Perfil de {self.user.username}"
 
-def resize_image(input_path, output_path, size=(150, 150)):
+def resize_image(input_path, output_path, size=(200, 200)):
     with Image.open(input_path) as img:
         img = img.resize(size, Image.Resampling.LANCZOS)  # ou Image.LANCZOS em versões mais recentes
         img.save(output_path, "JPEG")
