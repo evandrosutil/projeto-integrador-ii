@@ -38,15 +38,15 @@ python -m pip install -r requirements.txt
 Com isso, você pode fazer e rodar as migrations do django:
 ```bash
 # cria as migrations
-python pet_adoption/manage.py makemigrations
+python manage.py makemigrations
 
 # roda as migrations
-python pet_adoption/manage.py migrate
+python manage.py migrate
 ```
 
 Por fim, para rodar o server:
 ```bash
-python pet_adoption/manage.py runserver
+python manage.py runserver
 ```
 
 ### Frontend
@@ -61,4 +61,3 @@ npm install
 # inicia o front
 npm start
 ```
-
