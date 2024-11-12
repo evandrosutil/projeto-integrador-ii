@@ -1,0 +1,174 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: transparent;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #6b46c1; /* Cor roxa */
+  text-decoration: none;
+}
+
+.default-btn {
+  padding: 0.5rem 1rem;
+  background-color: #414141;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  margin-right: 0.5rem;
+}
+
+.default-btn:last-child {
+  margin-right: 0;
+}
+
+.default-btn:hover {
+  background-color: #333333;
+}
+
+.hero {
+  text-align: center;
+  padding: 20px;
+}
+
+.hero-animal-carousel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.animal-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-animal-card {
+  width: 300px; 
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-animal-image {
+  width: 10%;
+  height: 300px; 
+  border-top-left-radius: 1px;
+  border-top-right-radius: 12px;
+}
+
+.hero-animal-info {
+  padding: 10px;
+  width: 100%; /* Garante que o conteúdo ocupe toda a largura do card */
+}
+
+.hero-animal-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  color: #333;
+}
+
+.hero-details {
+  font-size: 0.9em;
+  color: #555;
+  line-height: 1.4;
+}
+
+.adopt-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #f68d2e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.adopt-btn:hover {
+  background-color: #d67b26;
+}
+
+.hero .images {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero img {
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.hero h1 {
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+
+.adopt-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #414141;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reviews {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.reviews h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.review-cards {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.review-card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  width: 200px;
+}
+
+.footer {
+  padding: 1rem;
+  text-align: center;
+  background-color: #333;
+  color: white;
+}
+
+.footer .social-links a {
+  color: white;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}

@@ -3,7 +3,8 @@ Repositório com código para avaliação do projeto integrador II da UNIVESP.
 
 ## Ambiente de desenvolvimento
 
-### Banco de dados
+### Backend
+#### Banco de dados
 Para criar a base de dados, com o docker rodando:
 ```bash
 docker compose up -d
@@ -19,6 +20,7 @@ Para acessar o banco de dados:
 psql -h localhost -p 5432 -U root -d petadocao
 ```
 
+#### ambiente e inicialização do servidor
 ```bash
 # primeiro, crie o ambiente
 python -m venv venv
@@ -46,3 +48,17 @@ Por fim, para rodar o server:
 ```bash
 python pet_adoption/manage.py runserver
 ```
+
+### Frontend
+
+```bash
+# caso tenha algum erro com SSL, executar:
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
+
+# instala as dependências
+npm install
+
+# inicia o front
+npm start
+```
+
