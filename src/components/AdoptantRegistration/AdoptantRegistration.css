@@ -1,0 +1,206 @@
+.registration-container {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+}
+
+.registration-title {
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 300;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e2e2e2;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  background-color: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-bottom-color: #666;
+}
+
+.form-input::placeholder {
+  color: #999;
+  font-weight: 300;
+}
+
+.form-select {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e2e2e2;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  background-color: transparent;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-bottom-color: #666;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-checkbox {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 2rem;
+}
+
+.submit-button:hover {
+  background-color: #333;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Estilização do input type="date" */
+.form-input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+/* Estilização do select para remover a seta padrão */
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-right: 2rem;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .registration-container {
+    padding: 1rem;
+  }
+  
+  .registration-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Estilos para o grupo do input numérico */
+.number-input-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.number-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e2e2e2;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  background-color: transparent;
+  transition: border-color 0.3s ease;
+  -moz-appearance: textfield; /* Remove as setas padrão no Firefox */
+}
+
+/* Remove as setas padrão do input number no Chrome e Safari */
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number-input:focus {
+  outline: none;
+  border-bottom-color: #666;
+}
+
+/* Botões de controle personalizados */
+.number-controls {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.number-control-btn {
+  background: transparent;
+  border: 1px solid #e2e2e2;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #666;
+  font-size: 1rem;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.number-control-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #666;
+}
+
+.number-control-btn:active {
+  background-color: #e5e7eb;
+}
+
+.number-value {
+  min-width: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+}
