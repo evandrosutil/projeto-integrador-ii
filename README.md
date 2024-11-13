@@ -3,6 +3,15 @@ Repositório com código para avaliação do projeto integrador II da UNIVESP.
 
 ## Ambiente de desenvolvimento
 
+### Docker
+Usando o docker você consegue subir o banco de dados, o backend e o frontend:
+```sh
+docker compose up -d
+```
+
+Depois, basta acessar [http://localhost:3000](http://localhost:3000)
+
+
 ### Backend
 #### Banco de dados
 Para criar a base de dados, com o docker rodando:
