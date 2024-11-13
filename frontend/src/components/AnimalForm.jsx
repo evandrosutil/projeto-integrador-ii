@@ -24,8 +24,8 @@ function AnimalForm() {
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' 
-      ? e.target.checked 
+    const value = e.target.type === 'checkbox'
+      ? e.target.checked
       : e.target.value;
 
     setFormData({
@@ -94,6 +94,9 @@ function AnimalForm() {
 
       setImage(null);
       setPreview(null);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
     } catch (err) {
       console.log("err.status =", err.status);
       if (err.status === 403) {
@@ -101,19 +104,22 @@ function AnimalForm() {
       } else {
         setError(err.response?.data?.message || 'Erro ao cadastrar animal');
       }
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
     }
   };
 
   return (
     <div className="registration-container">
       <h2 className="registration-title">Cadastrar Novo Animal</h2>
-      
+
       {message && (
         <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
           {message}
         </div>
       )}
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
           {error}
@@ -145,7 +151,7 @@ function AnimalForm() {
             <option value="cachorro">cachorro</option>
           </select>
         </div>
-  
+
         <div className="form-group">
           <input
             type="text"
@@ -242,7 +248,7 @@ function AnimalForm() {
         </div>
 
         <div className="form-group">
-          <input 
+          <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -259,13 +265,19 @@ function AnimalForm() {
           )}
         </div>
 
-        <button 
+        <button
           type="submit"
           className="submit-button"
         >
           Cadastrar Animal
         </button>
       </form>
+
+      {(message || error.general) && (
+        <div className="popup">
+          {message || error.general}
+        </div>
+      )}
     </div>
   );
 }

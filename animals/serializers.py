@@ -66,6 +66,22 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 user.delete()
             raise e
 
+    def update(self, instance, validated_data):
+        # Atualiza campos do usuário
+        profile_data = validated_data.pop('profile', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Atualiza o perfil, se aplicável
+        if profile_data and instance.role == 'adopter':
+            profile = instance.profile
+            for attr, value in profile_data.items():
+                setattr(profile, attr, value)
+            profile.save()
+        
+        instance.save()
+        return instance
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):

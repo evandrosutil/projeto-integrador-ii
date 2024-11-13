@@ -7,6 +7,7 @@ import NumberInput from '../../utils';
 
 const AdoptantRegistration = () => {
   const navigate = useNavigate();
+  const [message, setMessage] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -40,7 +41,7 @@ const AdoptantRegistration = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     if (name.startsWith('profile.')) {
       const profileField = name.split('.')[1];
       setFormData(prev => ({
@@ -61,7 +62,7 @@ const AdoptantRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/register/adopter/', {
+      const response = await api.post('/adopter/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -70,18 +71,26 @@ const AdoptantRegistration = () => {
         last_name: formData.last_name,
         profile: formData.profile
       });
-      
+
+      setMessage('Usuário cadastrado com sucesso!');
+
       localStorage.setItem('token', response.data.token);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
       navigate('/');
     } catch (error) {
       setErrors(error.response?.data || { general: "Erro ao registrar novo adotante" });
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
     }
   };
 
   return (
     <div className="registration-container">
       <h2 className="registration-title">Cadastre-se</h2>
-      
+
       <form onSubmit={handleSubmit} className="registration-form">
         <div className="form-group">
           <input
@@ -243,7 +252,7 @@ const AdoptantRegistration = () => {
         </div>
 
         <div className="checkbox-group">
-          <input 
+          <input
             type="checkbox"
             name="profile.has_children"
             checked={formData.profile.has_children}
@@ -257,7 +266,7 @@ const AdoptantRegistration = () => {
         </div>
 
         <div className="checkbox-group">
-          <input 
+          <input
             type="checkbox"
             name="profile.has_allergic_residents"
             checked={formData.profile.has_allergic_residents}
@@ -352,8 +361,10 @@ const AdoptantRegistration = () => {
           />
         </div>
 
-        {errors.general && (
-          <div className="error-message">{errors.general}</div>
+        {(message || errors.general) && (
+          <div className="popup">
+            {message || errors.general}
+          </div>
         )}
 
         <button type="submit" className="submit-button">
