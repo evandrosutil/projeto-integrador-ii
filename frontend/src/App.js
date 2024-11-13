@@ -7,6 +7,7 @@ import AnimalList from './components/AnimalList/AnimalList';
 import AnimalForm from './components/AnimalForm';
 import PrivateRoute from './components/PrivateRoute';
 import AdoptantRegistration from './components/AdoptantRegistration/AdoptantRegistration';
+import AdoptantProfile from './components/AdoptantRegistration/AdoptantProfile';
 import Home from './components/Home';
 import Footer from './components/Footer';
 import './App.css';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register/admin" element={<Register />} />
           <Route path="/register" element={<AdoptantRegistration />} />
+          <Route path="/profile" element={<AdoptantProfile />} />
           <Route path="/animals/available" element={<AnimalList />} />
           <Route 
           path="/animals" 

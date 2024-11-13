@@ -12,6 +12,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
+class UserDetailView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserRegistrationSerializer
+
+    def get_object(self):
+        # Retorna o usuário autenticado
+        return self.request.user
+
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer

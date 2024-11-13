@@ -12,9 +12,9 @@ const AdoptantRegistration = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    first_name: '',
+    last_name: '',
     profile: {
-      first_name: '',
-      last_name: '',
       phone: '',
       birth_date: '',
       street_name: '',
@@ -66,6 +66,8 @@ const AdoptantRegistration = () => {
         email: formData.email,
         password: formData.password,
         role: 'adopter',
+        first_name: formData.first_name,
+        last_name: formData.last_name,
         profile: formData.profile
       });
       
@@ -84,8 +86,8 @@ const AdoptantRegistration = () => {
         <div className="form-group">
           <input
             type="text"
-            name="profile.first_name"
-            value={formData.profile.first_name}
+            name="first_name"
+            value={formData.first_name}
             onChange={handleChange}
             placeholder="nome"
             className="form-input"
@@ -95,8 +97,8 @@ const AdoptantRegistration = () => {
         <div className="form-group">
           <input
             type="text"
-            name="profile.last_name"
-            value={formData.profile.last_name}
+            name="last_name"
+            value={formData.last_name}
             onChange={handleChange}
             placeholder="sobrenome"
             className="form-input"

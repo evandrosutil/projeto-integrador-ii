@@ -3,7 +3,7 @@ import { isAuthenticated } from '../services/auth';
 
 const handleLogout = () => {
   logout();
-  navigate('/login');
+  navigate('/');
 };
 
 const Header = () => {
