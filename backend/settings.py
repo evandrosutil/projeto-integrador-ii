@@ -106,7 +106,7 @@ DATABASES = {
         'NAME': 'petadocao',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
