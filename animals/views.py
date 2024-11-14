@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Animal, User
+from .models import Animal, User, AdoptionIntent
 from .permissions import IsAdminUser
 from .serializers import AnimalSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
@@ -77,17 +77,46 @@ class AnimalViewSet(viewsets.ModelViewSet):
             'available_animals': available_animals,
             'adopted_animals': adopted_animals
         })
-
-    @action(detail=True, methods=['post'])
+    
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def adopt(self, request, pk=None):
         animal = self.get_object()
+        user = request.user
+
         if animal.status != 'available':
             return Response(
-                {'error': 'Este animal não está disponível para adoção'},
-                status=400
+                {'detail': 'Este animal não está disponível para adoção.'},
+                status=status.HTTP_400_BAD_REQUEST
             )
         
-        animal.status = 'adopted'
-        animal.save()
+        if AdoptionIntent.objects.filter(user=user, animal=animal).exists():
+            return Response(
+                {'detail': 'Você já expressou interesse em adotar este animal.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        return Response({'status': 'Animal marcado como adotado'})
+        AdoptionIntent.objects.create(user=user, animal=animal)
+        
+        return Response(
+            {'detail': 'Intenção de adoção registrada com sucesso.'},
+            status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def change_status(self, request, pk=None):
+        animal = self.get_object()
+        new_status = request.data.get('status')
+
+        if new_status not in dict(Animal.STATUS_CHOICES):
+            return Response(
+                {'detail': 'Status inválido.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        animal.status = new_status
+        animal.save()
+
+        return Response(
+            {'detail': f'Status do animal atualizado para {new_status}.'},
+            status=status.HTTP_200_OK
+        )

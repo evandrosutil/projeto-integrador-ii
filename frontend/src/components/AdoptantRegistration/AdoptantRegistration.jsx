@@ -62,7 +62,7 @@ const AdoptantRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/adopter/register', {
+      const response = await api.post('/register/', {
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -78,7 +78,9 @@ const AdoptantRegistration = () => {
       setTimeout(() => {
         setMessage('');
       }, 3000);
-      navigate('/');
+      setTimeout(() => {
+        navigate('/');
+      }, 500)
     } catch (error) {
       setErrors(error.response?.data || { general: "Erro ao registrar novo adotante" });
       setTimeout(() => {

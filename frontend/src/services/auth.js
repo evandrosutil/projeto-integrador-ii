@@ -7,14 +7,10 @@ export const USER_DATA_KEY = "userData";
 
 export const login = async (username, password) => {
   try {
-    console.log('Tentando login com:', { username });
     const response = await api.post('/token/', { username, password });
-    console.log('Resposta do login:', response.data);
     const { access, refresh } = response.data;
   
     const decodedToken = jwtDecode(access);
-
-    console.log('decoded: ', decodedToken);
 
     localStorage.setItem(TOKEN_KEY, access);
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
@@ -37,7 +33,6 @@ export const logout = () => {
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem('token');
-  console.log('Token encontrado:', !!token);
   return !!token;
 };
 

@@ -116,6 +116,27 @@ class AdopterProfile(models.Model):
     def __str__(self):
         return f"Perfil de {self.user.username}"
 
+class AdoptionIntent(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='adoption_intents'
+    )
+    animal = models.ForeignKey(
+        'Animal',
+        on_delete=models.CASCADE,
+        related_name='adoption_intents'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'animal')
+        verbose_name = 'Intenção de Adoção'
+        verbose_name_plural = 'Intenções de Adoção'
+
+    def __str__(self):
+        return f"{self.user.username} deseja adotar {self.animal.name}"
+
 def resize_image(input_path, output_path, size=(200, 200)):
     with Image.open(input_path) as img:
         img = img.resize(size, Image.Resampling.LANCZOS)  # ou Image.LANCZOS em versões mais recentes

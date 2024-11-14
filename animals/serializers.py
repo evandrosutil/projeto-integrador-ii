@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Animal, User, AdopterProfile
+from .models import Animal, User, AdopterProfile, AdoptionIntent
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
@@ -95,6 +95,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class AnimalSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
+    interested_users = serializers.SerializerMethodField()
     
     class Meta:
         model = Animal
@@ -102,7 +103,7 @@ class AnimalSerializer(serializers.ModelSerializer):
             'id', 'name', 'species', 'breed', 'gender',
             'age_estimated', 'weight', 'status', 'description',
             'vaccinated', 'neutered', 'created_at', 'updated_at',
-            'created_by', 'image'
+            'created_by', 'image', 'interested_users'
         ]
         read_only_fields = ['created_at', 'updated_at', 'created_by']
 
@@ -115,3 +116,19 @@ class AnimalSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("O peso deve ser maior que zero")
         return value
+    
+    def get_interested_users(self, obj):
+        intents = AdoptionIntent.objects.filter(animal=obj)
+        return InterestedUserSerializer([intent.user for intent in intents], many=True).data
+
+class AdoptionIntentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdoptionIntent
+        fields = ['id', 'user', 'animal', 'created_at']
+        read_only_fields = ['id', 'user', 'created_at']
+
+class InterestedUserSerializer(serializers.ModelSerializer):
+    profile = AdopterProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'profile'] 

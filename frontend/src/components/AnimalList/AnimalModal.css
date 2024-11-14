@@ -59,29 +59,73 @@
   background-color: #f3f4f6;
 }
 
-.modal-adopt-button {
-  position: sticky;
-  bottom: 0;
-  background-color: white;
-  padding: 1rem;
-  border-top: 1px solid #e5e7eb;
-  width: 100%;
-}
-
 @media (min-width: 768px) {
   .modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
-  
-.modal-adopt-button {
-    position: static;
-    border-top: none;
-    padding: 0;
-  }
 }
-
+  
 .modal-info-text {
   text-transform: capitalize;
 } 
+
+.adopt-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.adopt-button:hover {
+  background-color: #218838;
+}
+
+.popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 25px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  z-index: 1100;
+  opacity: 0.9;
+}
+
+.popup.success {
+  background-color: #28a745;
+}
+
+.popup.error {
+  background-color: #dc3545;
+}
+
+.interested-list {
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.interested-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.interested-item .user-icon {
+  margin-right: 0.5rem;
+  color: #4a90e2; /* Cor do ícone */
+}
+
+.interested-item span {
+  font-weight: 500;
+}

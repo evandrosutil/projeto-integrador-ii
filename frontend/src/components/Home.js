@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import Hero from './Hero';
 import Reviews from './Reviews';
+import WhyAdopt from './WhyAdopt';
 
 const Home = () => {
     const [animals, setAnimals] = useState([]);
@@ -31,6 +32,7 @@ const Home = () => {
     return (
         <div>
             <Hero animals={animals} />
+            <WhyAdopt />
             <Reviews />
         </div>
     );

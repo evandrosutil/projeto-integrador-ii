@@ -46,18 +46,23 @@ const getNeutered = (neutered) => {
 }
 
 const getPorte = (weight) => {
-  console.log("peso: ", weight);
   if (weight <= 15) return 'pequeno';
   if (weight <= 25) return 'médio';
   if (weight <= 45) return 'grande';
   return 'gigante';
 }
+
 const getRandomImage = () => {
   const randomIndex = Math.floor(Math.random() * placeholderImages.length);
   const result = placeholderImages[randomIndex];
-  console.log(result);
   return result;
 };
+
+const getResidenceType = (residenceType) => {
+  if (residenceType === 'HOUSE') return 'Casa';
+  if (residenceType === 'APARTMENT') return 'Apartamento';
+  if (residenceType === 'FARM') return 'Fazenda';
+}
 
 function AdopterAnimalList() {
   const [animals, setAnimals] = useState([]);
@@ -72,6 +77,254 @@ function AdopterAnimalList() {
   const [castradoFilter, setCastradoFilter] = useState('todos');
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const userData = getUserData();
+
+  const InterestedModal = ({ user, onClose }) => {
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-header">
+          <h2 className="text-2xl font-bold">{user.name}</h2>
+          <button
+            onClick={onClose}
+            className="modal-close-button"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className="modal-content">
+          <div className='profile-view'>
+            <div className="profile-section">
+              <h3>Informações pessoais</h3>
+              <p><strong>Nome:</strong> {user.first_name}</p>
+              <p><strong>Sobrenome:</strong> {user.last_name}</p>
+              <p><strong>Telefone:</strong> {user.profile.phone}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+            </div>
+
+            <div className="profile-section">
+              <h3>Informações de Residência</h3>
+              <p><strong>Tipo de Residência:</strong> {getResidenceType(user.profile.residence_type)}</p>
+              <p><strong>Possui telas de proteção:</strong> {user.profile.has_screens ? "Sim" : "Não"}</p>
+              <p><strong>Número de moradores:</strong> {user.profile.number_of_residents}</p>
+              <p><strong>Crianças na residência:</strong> {user.profile.has_children ? "Sim" : "Não"}</p>
+              <p><strong>Moradores com alergia a pets:</strong> {user.profile.has_allergic_residents ? "Sim" : "Não"}</p>
+              <p><strong>Possui outros pets:</strong> {user.profile.has_other_pets ? "Sim" : "Não"}</p>
+              {user.profile.has_other_pets && (
+                <p><strong>Número de pets:</strong> {user.profile.number_of_pets}</p>
+              )}
+            </div>
+
+            <div className="profile-section">
+              <h3>Motivação para Adoção</h3>
+              <p>{user.profile.adoption_motivation}</p>
+              <br />
+              <p><strong>Aceita os custos e responsabilidades:</strong> {user.profile.acknowledges_costs ? "Sim" : "Não"}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const AnimalModal = ({ animal, onClose }) => {
+    const [status, setStatus] = useState(animal.status)
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [selectedUser, setSelectedUser] = useState('')
+
+    const handleStatusChange = (e) => {
+      setStatus(e.target.value);
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await api.post(`/animals/${animal.id}/change_status/`, {
+          status: status
+        });
+
+        setMessage('Status alterado com sucesso');
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+        setTimeout(() => {
+          fetchAnimals();
+          animal.status = status;
+        }, 500);
+      } catch (error) {
+        console.log(error);
+        setError('Erro ao alterar o status para ', status);
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+      }
+    }
+    const handleAdopt = async () => {
+      try {
+        const response = await api.post(`/animals/${animal.id}/adopt/`);
+        setMessage(response.data.detail || 'Intenção de adoção registrada com sucesso.');
+
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+        setTimeout(() => {
+          fetchAnimals();
+        }, 500);
+      } catch (err) {
+        setError(
+          err.response?.data?.detail || 'Erro ao registrar a intenção de adoção.'
+        );
+
+        setTimeout(() => {
+          setError('');
+        }, 3000);
+      }
+    };
+    if (!animal) return null;
+
+    const booleanInfo = (info) => {
+      if (info) return 'Sim';
+      return 'Não';
+    }
+
+    const handleUserInfoClick = (user) => {
+      setSelectedUser(user);
+    }
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-header">
+          <h2 className="text-2xl font-bold">{animal.name}</h2>
+          <button
+            onClick={onClose}
+            className="modal-close-button"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className="modal-content">
+          <div className="modal-grid">
+            {/* Coluna da imagem */}
+            <div>
+              <img
+                src={animal.image}
+                alt={animal.name}
+                className="modal-image"
+              />
+            </div>
+
+            {/* Coluna das informações */}
+            <div>
+              <div className="modal-info">
+                <h3 className="text-xl font-semibold mb-4">Informações Básicas</h3>
+                <div className="space-y-4">
+                  <div className="modal-info-text">
+                    <span className="font-semibold w-24">Raça: </span>
+                    <span>{animal.breed}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold w-24">Gênero: </span>
+                    <span>{getGenderLabel(animal.gender)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold w-24">Idade: </span>
+                    <span>{animal.age_estimated} anos</span>
+                  </div>
+                  <div className="modal-info-text">
+                    <span className="font-semibold w-24">Porte: </span>
+                    <span>{getPorte(animal.weight)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold w-24">Peso: </span>
+                    <span>{animal.weight} kg</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold w-24">Vacinação: </span>
+                    <span>{booleanInfo(animal.vaccinated)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold w-24">Castração: </span>
+                    <span>{booleanInfo(animal.neutered)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {animal.description && (
+                <div className="modal-info">
+                  <h3 className="text-xl font-semibold mb-4">Sobre</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    {animal.description}
+                  </p>
+                </div>
+              )}
+
+              {userData.role === 'admin' && (
+                <form onSubmit={handleSubmit}>
+                  <label htmlFor="status"> Status do Animal:</label>
+                  <select
+                    id="status"
+                    value={status}
+                    onChange={handleStatusChange}
+                    className="status-select"
+                  >
+                    <option value="available">Disponível</option>
+                    <option value="adopted">Adotado</option>
+                    <option value="under_treatment">Em tratamento</option>
+                    <option value="quarantine">Em quarentena</option>
+                  </select>
+                  <button type="submit" className="adopt-button">Mudar status</button>
+                </form>
+              )
+              }
+            </div>
+
+            <div>
+              {userData.role === 'admin' ? (
+                <div>
+                  <h3>Interessados</h3>
+                  <ul className="interested-list">
+                    {animal.interested_users && animal.interested_users.length > 0 ? (
+                      animal.interested_users.map((user) => (
+                        <li
+                          key={user.id}
+                          onClick={() => handleUserInfoClick(user)}
+                          className="interested-item">
+                          <span className="user-icon">👤</span>
+                          <span>{user.username} - {user.email}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <p>Nenhum interessado ainda.</p>
+                    )}
+                  </ul>
+                </div>
+              ) : (
+                <div className="modal-adopt-button">
+                  <button className="adopt-button" onClick={handleAdopt}>
+                    Quero Adotar
+                  </button>
+                </div>
+              )}
+
+              {selectedUser && (
+                <InterestedModal
+                  user={selectedUser}
+                  onClose={() => setSelectedUser(null)}
+                />
+              )}
+
+              {/* Mensagens de sucesso e erro */}
+              {message && <div className="popup success">{message}</div>}
+              {error && <div className="popup error">{error}</div>}
+            </div>
+          </div>
+          {message && <div className="popup success">{message}</div>}
+          {error && <div className="popup error">{error}</div>}
+        </div >
+      </div>
+    );
+  };
 
   useEffect(() => {
     fetchAnimals();
@@ -89,8 +342,7 @@ function AdopterAnimalList() {
   };
 
   const filteredAnimals = animals.filter(animal => {
-    console.log("animal ", animal);
-    const matchesName = animal.name.toLowerCase().includes(searchTerm.toLowerCase());  
+    const matchesName = animal.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesBreed = animal.breed.toLowerCase().includes(searchTerm.toLocaleLowerCase());
     const matchesSpecies = animal.species.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase());
     const matchesIdade = idadeFilter === 'todos' || getIdadeGroup(animal.age_estimated) === idadeFilter;
@@ -116,26 +368,6 @@ function AdopterAnimalList() {
       <h2 className="page-title">Adoções</h2>
 
       {/* Campo de Busca */}
-      {/* 
-      <div className='filters-container'>
-        <div className="search-container">
-          <div className="relative">
-            <Search className="search-icon" size={20} />
-            <input
-              type="text"
-              placeholder="Buscar por nome, espécie ou raça..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-          </div>
-
-          <div className='select-container'>
-
-          </div>
-        </div>
-      </div> 
-      */}
       <div className='filters-container'>
         {/* Campo de Busca */}
         <div className="search-container">
@@ -262,92 +494,5 @@ function AdopterAnimalList() {
   );
 }
 
-const AnimalModal = ({ animal, onClose }) => {
-  if (!animal) return null;
-
-  const booleanInfo = (info) => {
-    if (info) return 'Sim';
-    return 'Não';
-  }
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal-header">
-        <h2 className="text-2xl font-bold">{animal.name}</h2>
-        <button
-          onClick={onClose}
-          className="modal-close-button"
-        >
-          <X size={24} />
-        </button>
-      </div>
-
-      <div className="modal-content">
-        <div className="modal-grid">
-          {/* Coluna da imagem */}
-          <div>
-            <img
-              src={animal.image}
-              alt={animal.name}
-              className="modal-image"
-            />
-          </div>
-
-          {/* Coluna das informações */}
-          <div>
-            <div className="modal-info">
-              <h3 className="text-xl font-semibold mb-4">Informações Básicas</h3>
-              <div className="space-y-4">
-                <div className="modal-info-text">
-                  <span className="font-semibold w-24">Raça: </span>
-                  <span>{animal.breed}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-semibold w-24">Gênero: </span>
-                  <span>{getGenderLabel(animal.gender)}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-semibold w-24">Idade: </span>
-                  <span>{animal.age_estimated} anos</span>
-                </div>
-                <div className="modal-info-text">
-                  <span className="font-semibold w-24">Porte: </span>
-                  <span>{getPorte(animal.weight)}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-semibold w-24">Peso: </span>
-                  <span>{animal.weight} kg</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-semibold w-24">Vacinação: </span>
-                  <span>{booleanInfo(animal.vaccinated)}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-semibold w-24">Castração: </span>
-                  <span>{booleanInfo(animal.neutered)}</span>
-                </div>
-              </div>
-            </div>
-
-            {animal.description && (
-              <div className="modal-info">
-                <h3 className="text-xl font-semibold mb-4">Sobre</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {animal.description}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="modal-adopt-button">
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 w-full font-semibold">
-            Quero Adotar
-          </button>
-        </div>
-      </div>
-    </div >
-  );
-};
 
 export default AdopterAnimalList;

@@ -91,7 +91,9 @@ const AdoptantRegistration = () => {
       setTimeout(() => {
         setMessage('');
       }, 3000);
-      handleEditClick();
+      setTimeout(() => {
+        handleEditClick();
+      }, 500);
     } catch (error) {
       setErrors(error.response?.data || { general: "Erro ao atualizar os dados" });
       setTimeout(() => {
@@ -103,7 +105,7 @@ const AdoptantRegistration = () => {
     if (residenceType === 'HOUSE') return 'Casa';
     if (residenceType === 'APARTMENT') return 'Apartamento';
     if (residenceType === 'FARM') return 'Fazenda';
-  } 
+  }
 
   const handleEditClick = () => setIsEditing(!isEditing);
 
@@ -441,11 +443,10 @@ const AdoptantRegistration = () => {
       )
       }
 
-      {(message || errors.general) && (
-        <div className="popup">
-          {message || errors.general}
-        </div>
-      )}
+      {/* Mensagens de sucesso e erro */}
+      {message && <div className="popup success">{message}</div>}
+      {error && <div className="popup error">{error}</div>}
+
     </div >
   );
 };

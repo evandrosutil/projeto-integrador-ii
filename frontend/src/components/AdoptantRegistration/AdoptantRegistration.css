@@ -107,13 +107,11 @@
   margin-top: 0.5rem;
 }
 
-/* Estilização do input type="date" */
 .form-input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0.5;
   cursor: pointer;
 }
 
-/* Estilização do select para remover a seta padrão */
 .form-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -147,10 +145,9 @@
   font-size: 0.875rem;
   background-color: transparent;
   transition: border-color 0.3s ease;
-  -moz-appearance: textfield; /* Remove as setas padrão no Firefox */
+  -moz-appearance: textfield; 
 }
 
-/* Remove as setas padrão do input number no Chrome e Safari */
 .number-input::-webkit-outer-spin-button,
 .number-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -162,7 +159,6 @@
   border-bottom-color: #666;
 }
 
-/* Botões de controle personalizados */
 .number-controls {
   position: absolute;
   right: 0;
@@ -217,4 +213,12 @@
   z-index: 1000;
   font-size: 16px;
   text-align: center;
+}
+
+.popup.success {
+  background-color: #28a745;
+}
+
+.popup.error {
+  background-color: #dc3545;
 }

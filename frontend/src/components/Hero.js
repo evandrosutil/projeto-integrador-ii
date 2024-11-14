@@ -70,9 +70,9 @@ const Hero = ({ animals }) => {
           ))}
         </Slider>
       ) : (
-        <p>Carregando animais...</p>
+        <p>Sem animais disponíveis...</p>
       )}
-      <button className="adopt-btn">Adote</button>
+      {/* <button className="adopt-btn">Adote</button> */}
 
     </section>
   );
